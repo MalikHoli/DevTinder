@@ -7,16 +7,17 @@ server.listen(PORT,"0.0.0.0",()=>{
     console.log("I am listening now");
 })
 
-server.get("/user", (req,res)=>{
-    res.send({"userName":"Sona"})
+// using the regx here
+// server.get(/^\/ab?c$/,(req,res)=>{
+//     res.send("yes here is your data")
+// })
+
+server.get("/user",(req,res)=>{
+    console.log(req.query)
+    res.send("yes here is your data")
 })
 
-server.post("/user", (req,res)=>{
-    // res.send({"userName":"Sona"})
-    console.log("user data saved successfully")
-})
-
-server.delete("/user", (req,res)=>{
-    res.send({"userName":"Sona"})
-    console.log("user deleted")
+server.get("/user/:userid",(req,res)=>{
+    console.log(req.params)
+    res.send("yes here is your data")
 })
