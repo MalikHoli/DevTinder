@@ -1,4 +1,5 @@
 const express = require("express");
+const {checkAdminAuth,checkUserAuth} = require("./middleware/auth");
 
 const server = express();
 const PORT = 3000;
@@ -7,21 +8,14 @@ server.listen(PORT,"0.0.0.0",()=>{
     console.log("I am listening now");
 })
 
-function handler1 (rq,rs,next){
-    console.log("somebody is requesting")
-    next()
-}
+server.use("/admin",checkAdminAuth)
 
-function handler2 (req,res,next){
-    res.send("serving via 2nd handler")
-    console.log("Now control is with second handler")
-    next()
-}
+server.get("/admin/getdata",(req,res)=>{
+    res.send("Here is your admin data")
+})
 
-function handler3 (req,res,next){
-    // res.send("serving via 2nd handler")
-    console.log("Now control is with 3rd handler")
-    next()   
-}
+server.use("/user",checkUserAuth)
 
-server.get("/user",handler1,handler3,handler2)
+server.get("/user/getdata",(req,res)=>{
+    res.send("Here is your data")
+})
