@@ -19,18 +19,12 @@ server.use("/",(req,res,next)=>{
     ++requestNo
     console.log(Date.now()," : ","incoming request no: ",requestNo)
     next()
-})
+},express.json())
 
 server.post("/signup",async (req,res)=>{
+    console.log(req.body)
     // Creating a new instance of the User model
-     const user = new User({
-        firstName:"FirstName",
-        lastName:"LastName",
-        email:"firstname@gmail.com",
-        password:"ThisIsStr0ngPwd",
-        age:30,
-        gender:"Male"
-    });
+     const user = new User(req.body);
     try{
         await user.save()
         res.send("user document is created.... please check the DB")
