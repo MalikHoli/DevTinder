@@ -10,8 +10,8 @@ async function connectToMongodb (){
         await mongoose.connect(uri);
     }
     catch (err){
-        console.log("could not connect to the database: ",err)
-        throw err;
+        console.log("could not connect to the database: ",err.message)
+        // throw err;
     }
 }
 
