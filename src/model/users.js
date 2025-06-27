@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 //defining the user schema
 const userSchema = mongoose.Schema(
     {
-        firstName:{type:String,maxlength:50,minlength:4},
+        firstName:{type:String,required:true,maxlength:50,minlength:2},
         lastName:{type:String,maxlength:50,minlength:4},
         email:{type:String,required:true,unique:true,lowercase:true,trim:true,maxlength:254,minlength:12,
             validate: {
@@ -12,7 +14,7 @@ const userSchema = mongoose.Schema(
                         message: 'Please enter a valid mail id'
                     }
         },
-        password:{type:String,maxlength:50,minlength:10,
+        password:{type:String,required:true,minlength:8,
             validate: {
                         validator: function (value){return validator.isStrongPassword(value)},
                         message: 'Please ensures that the password has at least 8 characters, one lowercase letter, one uppercase letter, one number, and one special character'
@@ -38,6 +40,18 @@ const userSchema = mongoose.Schema(
         timestamps:true
     }
 );
+
+userSchema.methods.getJWT = function (){
+    const user = this //here this keyword represents the instance of the UserSchema which is nothing but the documets
+    const token = jwt.sign({ id: user._id }, 'ServerSide@#Pwd') 
+    return token
+}
+
+userSchema.methods.validateCreds = async function (passwordInputByUser){
+    const user = this
+    const isValidCred = await bcrypt.compare(passwordInputByUser, user.password)
+    return isValidCred
+}
 
 //creating the user collection using the useschema definition
 //this is model and its a instance of class 

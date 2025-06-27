@@ -1,25 +1,24 @@
-const checkAdminAuth = (req,res,next)=>{
-    console.log("Admin authentication initiated")
-    const tocken = "abc";
-    if(tocken === "abc"){
-        console.log("Admin is valid")
+const {User} = require("../model");
+const jwt = require('jsonwebtoken');
+
+const userAuth = async(req,res,next)=>{
+    try {
+        const {DevtinderTocken} = req.cookies;
+        if(!DevtinderTocken){
+            throw new Error("Token is not valid")
+        }
+        const {id} = jwt.verify(DevtinderTocken, 'ServerSide@#Pwd');
+        const user = await User.findOne({_id:id}).lean();
+        if(!user){
+            throw new Error("User not found")
+        }
+        req.user = user //attaching the retrived user to the reqest so that next handler can use it
         next()
-    }
-    else{
-        res.status(401).send("Unauthrised Admin!!")
+    } catch(err) {
+        res.status(400).send("something went wrong")
+        console.log(err.message)
     }
 }
 
-const checkUserAuth = (req,res,next)=>{
-    console.log("User authentication initiated")
-    const tocken = "abc";
-    if(tocken === "abc"){
-        console.log("User is valid")
-        next()
-    }
-    else{
-        res.status(401).send("Unauthrised User!!")
-    }
-}
 
-module.exports = {checkAdminAuth,checkUserAuth} 
+module.exports = {userAuth}

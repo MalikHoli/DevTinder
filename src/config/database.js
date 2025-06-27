@@ -11,7 +11,8 @@ async function connectToMongodb (){
     }
     catch (err){
         console.log("could not connect to the database: ",err.message)
-        // throw err;
+        /*Error needs to be thrown here to prevent the program flow to start listening to client even though databse is not connected*/
+        throw err;  
     }
 }
 
