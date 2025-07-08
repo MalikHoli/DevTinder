@@ -1,2 +1,3 @@
 const {User} = require("./users");
-module.exports = {User};
+const {ConnectionRequests} = require("./connections");
+module.exports = {User,ConnectionRequests};
