@@ -3,8 +3,14 @@ const mongoose = require('mongoose');
 //defining the connection requests schema
 const connectionRequestsSchema = mongoose.Schema(
     {
-        fromUserId:{type: mongoose.Schema.Types.ObjectId,required:true},
-        toUserId:{type: mongoose.Schema.Types.ObjectId,required:true},
+        fromUserId:{
+            type: mongoose.Schema.Types.ObjectId,
+            required:true,
+            //this will created reference 
+            //i.e. association with user collection and based on content of this field mongodb identify the associated field in user collection  
+            ref:"User" 
+        },
+        toUserId:{type: mongoose.Schema.Types.ObjectId,required:true,ref:"User"},
         status:{
             type:String,
             required:true,
@@ -18,6 +24,8 @@ const connectionRequestsSchema = mongoose.Schema(
         timestamps:true
     }
 );
+
+connectionRequestsSchema.index({fromUserId:1,toUserId:1}); //creating compound index on the from & to userid combination
 
 connectionRequestsSchema.pre('save',function(next){
     const connectionRequest = this; //assigning a instance of this class (document)

@@ -2,12 +2,13 @@ const express = require("express");
 const {User} = require("../model");
 const bcrypt = require('bcrypt');
 const {userAuth} = require("../middleware/auth.js");
+const {viewProfile} = require("../utils/viewProfile.js")
 
 const router = express.Router()
 
 router.get("/profile/view",userAuth,async (req,res)=>{
     try {
-        const {_id,password,createdAt,updatedAt,__v,...userProfile} = req.user;
+        const userProfile = viewProfile(req.user);
         res.send(userProfile)
     } catch(err) {
             res.status(400).send("Unathenticated user")
