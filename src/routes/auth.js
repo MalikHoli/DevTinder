@@ -31,7 +31,7 @@ router.post("/signup",async (req,res)=>{
     }
 })
 
-router.get("/login", async (req,res)=>{
+router.post("/login", async (req,res)=>{
     const {email,password} = req.body 
     try{
         const user = await User.findOne({email:email});
@@ -42,9 +42,9 @@ router.get("/login", async (req,res)=>{
         if(validateCreds){
             const jwtTocken = user.getJWT()
             res.cookie('DevtinderTocken',jwtTocken)
-            res.send("Login successful !")
+            res.send(user)
         } else{
-            throw new Error("Invalid password")
+            throw new Error("Invalid creds")
         }
     } catch(err){
         res.status(400).send("invalid credentials")

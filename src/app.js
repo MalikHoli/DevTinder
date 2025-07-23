@@ -1,6 +1,7 @@
 const express = require("express");
 const {connectToMongodb} = require("./config/database.js")
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const server = express();
 const PORT = 3000;
@@ -19,7 +20,12 @@ server.use("/",(req,res,next)=>{
     ++requestNo
     console.log(Date.now()," : ","incoming request no: ",requestNo)
     next()
-},express.json(),cookieParser())
+},cors(
+    {
+        origin: "http://localhost:5173",
+        credentials: true
+    }
+),express.json(),cookieParser())
 
 const authRounter = require("./routes/auth.js");
 const profileRouter = require("./routes/profile.js");
