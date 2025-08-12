@@ -36,7 +36,11 @@ router.post("/signup", async (req, res) => {
     const user = new User({ ...rest, password: hashedPassword }); //here passing a new object with all keys copied from req.body but password modified so avaoiding changing req.body iteself
     //****************************************************************
     await user.save(); // Saving the data to the DB
-    res.send("user document is created.... please check the DB");
+
+    //Lets add the logic of login once the user is signed up
+    const jwtTocken = user.getJWT();
+    res.cookie("DevtinderTocken", jwtTocken);
+    res.json({ message: "Signed up successfully", data: user });
   } catch (err) {
     res.status(400).send("Error saving the user :" + err);
     console.log("This is the error message ", err);
