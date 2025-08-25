@@ -7,7 +7,7 @@ const userAuth = async (req, res, next) => {
     if (!DevtinderTocken) {
       return res.status(401).send("Please login !");
     }
-    const { id } = jwt.verify(DevtinderTocken, "ServerSide@#Pwd");
+    const { id } = jwt.verify(DevtinderTocken, process.env.JWT_TOKEN);
     const user = await User.findOne({ _id: id }).lean();
     if (!user) {
       throw new Error("User not found");

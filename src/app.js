@@ -1,16 +1,16 @@
 const express = require("express");
+require("dotenv").config();
 const { connectToMongodb } = require("./config/database.js");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const server = express();
-const PORT = 3000;
 let requestNo = 0;
 
 connectToMongodb()
   .then(() => {
     console.log("Database connection is established");
-    server.listen(PORT, "localhost", () => {
+    server.listen(process.env.PORT, "localhost", () => {
       console.log("Server is listening now");
     });
   })

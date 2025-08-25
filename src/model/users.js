@@ -72,7 +72,7 @@ const userSchema = mongoose.Schema(
 
 userSchema.methods.getJWT = function () {
   const user = this; //here this keyword represents the instance of the UserSchema which is nothing but the documets
-  const token = jwt.sign({ id: user._id }, "ServerSide@#Pwd");
+  const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN);
   return token;
 };
 
