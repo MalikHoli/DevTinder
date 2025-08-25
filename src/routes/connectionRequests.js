@@ -4,6 +4,8 @@ const {ConnectionRequests,User} = require("../model");
 
 const router = express.Router()
 
+const sendEmail = require("../utils/sendEmail");
+
 router.post("/request/send/:status/:toUserId",userAuth, async (req,res)=>{
     try{
         const toUserId = req.params.toUserId;
@@ -30,6 +32,10 @@ router.post("/request/send/:status/:toUserId",userAuth, async (req,res)=>{
         const connectionRequest = new ConnectionRequests(data);
         await connectionRequest.save() // Saving the data to the DB
         res.send("connection request sent successfully");
+
+	const emailRes = await sendEmail.run();
+
+	console.log(emailRes);
 
     }catch(err) {
         res.status(400).send("invalid request");
